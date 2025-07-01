@@ -1,0 +1,45 @@
+bash
+medassistant/backend/requirements.txt
+
+text
+# Web framework
+fastapi==0.95.1
+
+# ASGI server
+uvicorn[standard]==0.23.1
+
+# ORM + DB driver
+SQLAlchemy==2.0.9
+psycopg2-binary==2.9.6
+
+# Pydantic for data validation
+pydantic==2.1.1
+
+# Authentication & security
+python-jose==3.3.0
+passlib[bcrypt]==1.7.4
+
+# Scheduling
+APScheduler==3.10.1
+
+# HTTP requests (if needed)
+requests==2.31.0
+
+# -----------------------
+# Testing
+# -----------------------
+pytest==7.3.1
+pytest-asyncio==0.21.0
+httpx==0.24.1
+
+# Linting
+flake8==6.0.0
+
+In your backend directory, run:
+cd medassistant/backend
+python3 -m venv .venv
+source .venv/bin/activate
+pip install --upgrade pip
+pip install -r requirements.txt
+
+This installs both the core dependencies (FastAPI, SQLAlchemy, etc.) and the testing tools (pytest, httpx) so that running pytest in backend/ will work out of the box.

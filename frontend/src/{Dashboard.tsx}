@@ -1,0 +1,59 @@
+// medassistant/frontend/src/Dashboard.tsx
+
+import React, { useEffect, useState } from "react";
+import InventoryTable from "./components/InventoryTable";
+import SensorStatusPanel from "./components/SensorStatusPanel";
+import AlertManagement from "./components/AlertManagement";
+import { Toaster } from "react-hot-toast";
+
+const Dashboard: React.FC = () => {
+  // You might fetch user info or auth status here
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Simulate any startup logic (e.g. auth check)
+    setLoading(false);
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="flex h-screen items-center justify-center">
+        <span className="text-lg font-medium">Loading dashboard…</span>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-gray-50 p-6">
+      <Toaster position="top-right" />
+
+      <header className="mb-6">
+        <h1 className="text-3xl font-bold">MedAssistant Dashboard</h1>
+      </header>
+
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+        {/* Inventory table spans two columns on large screens */}
+        <div className="lg:col-span-2">
+          <div className="bg-white shadow rounded-lg p-4">
+            <h2 className="mb-4 text-xl font-semibold">Inventory</h2>
+            <InventoryTable />
+          </div>
+        </div>
+
+        {/* Sensor status panel */}
+        <div className="bg-white shadow rounded-lg p-4">
+          <h2 className="mb-4 text-xl font-semibold">Sensors</h2>
+          <SensorStatusPanel />
+        </div>
+      </div>
+
+      {/* Alert management below */}
+      <section className="mt-6 bg-white shadow rounded-lg p-4">
+        <h2 className="mb-4 text-xl font-semibold">Active Alerts</h2>
+        <AlertManagement />
+      </section>
+    </div>
+  );
+};
+
+export default Dashboard;
