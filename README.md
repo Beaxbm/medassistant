@@ -6,58 +6,59 @@
 
 ## 📁 Repository Structure
 
-medassistant/
-├── .github/
-│ └── workflows/
-│ ├── ci.yml # Tests & lint (matrix)
-│ ├── build-and-push-ecr.yml # Docker build & ECR push
-│ └── deploy_infra.yml # Terraform infra deploy
-├── backend/
-│ ├── app/
-│ │ ├── main.py # FastAPI entrypoint + scheduler
-│ │ ├── db_session.py # SQLAlchemy engine & session
-│ │ ├── auth_security.py # JWT auth & RBAC
-│ │ ├── models.py # SQLAlchemy models
-│ │ ├── schemas.py # Pydantic schemas
-│ │ ├── scheduler.py # APScheduler jobs
-│ │ ├── routes/ # FastAPI routers
-│ │ │ ├── items.py
-│ │ │ ├── sensors.py
-│ │ │ ├── sensors_status.py
-│ │ │ └── alerts.py
-│ │ ├── services/ # Business logic
-│ │ │ ├── item_service.py
-│ │ │ ├── sensor_service.py
-│ │ │ └── alert_service.py
-│ │ └── infra/ # Terraform IaC
-│ │ ├── main.tf
-│ │ ├── variables.tf
-│ │ └── outputs.tf
-│ ├── Dockerfile # Backend container spec
-│ ├── requirements.txt # Python deps
-│ └── tests/ # pytest suites
-│ ├── test_sensor_service.py
-│ ├── test_sensors_route.py
-│ └── test_alert_service.py
-├── frontend/
-│ ├── public/
-│ │ └── index.html # Vite HTML template
-│ ├── src/
-│ │ ├── main.tsx # React entrypoint
-│ │ ├── index.css # Tailwind imports
-│ │ ├── Dashboard.tsx # Main page
-│ │ └── components/
-│ │ ├── InventoryTable.tsx
-│ │ ├── SensorStatusPanel.tsx
-│ │ └── AlertManagement.tsx
-│ ├── package.json # npm deps & scripts
-│ └── tailwind.config.js # Tailwind setup
+medassistant/                      ← root of your repo
+├── .github/                       ← GitHub configuration
+│   └── workflows/
+│       ├── ci.yml                ← Tests & lint workflow
+│       ├── build-and-push-ecr.yml← Docker build & ECR push
+│       └── deploy_infra.yml      ← Terraform apply infra
+│
+├── backend/                       ← Backend service
+│   ├── app/                       ← FastAPI source
+│   │   ├── main.py               ← app entrypoint & start_scheduler()
+│   │   ├── models.py             ← all SQLAlchemy models
+│   │   ├── schemas.py            ← all Pydantic schemas
+│   │   ├── auth_security.py      ← JWT auth & RBAC
+│   │   ├── db_session.py         ← SQLAlchemy engine + SessionLocal
+│   │   ├── routes/
+│   │   │   ├── items.py          ← `/items` endpoints
+│   │   │   ├── sensors.py        ← `/sensors/readings/` endpoint
+│   │   │   ├── sensors_status.py ← `/sensors/status/` endpoint
+│   │   │   └── alerts.py         ← `/alerts` endpoints
+│   │   ├── services/
+│   │   │   ├── item_service.py   ← `get_items` logic
+│   │   │   ├── sensor_service.py ← `ingest_and_check` logic
+│   │   │   └── alert_service.py  ← alert dispatch & rules
+│   │   ├── scheduler.py          ← APScheduler jobs & start_scheduler()
+│   │   └── infra/                ← your Terraform IaC
+│   │       ├── main.tf
+│   │       ├── variables.tf
+│   │       └── outputs.tf
+│   │
+│   ├── Dockerfile                ← container spec
+│   ├── requirements.txt          ← Python dependencies
+│   └── tests/                    ← pytest suites
+│       ├── test_sensor_service.py
+│       ├── test_sensors_route.py
+│       └── test_alert_service.py
+│
+├── frontend/                      ← React PWA
+│   ├── public/                   ← static assets (favicon, index.html)
+│   ├── src/
+│   │   ├── components/           ← reusable UI parts
+│   │   │   ├── InventoryTable.tsx
+│   │   │   ├── SensorStatusPanel.tsx
+│   │   │   └── AlertManagement.tsx
+│   │   └── Dashboard.tsx         ← main dashboard page
+│   ├── package.json              ← npm dependencies & scripts
+│   └── tailwind.config.js        ← Tailwind setup
+│
 ├── scripts/
-│ └── seed.py # DB seed script
-├── docker-compose.yml # Local dev services
-├── .env.example # Sample env vars
-└── README.md # This file
-
+│   └── seed.py                   ← initial DB seed script
+│
+├── docker-compose.yml            ← local dev orchestration
+├── .env.example                  ← sample environment vars
+└── README.md                     ← project overview & quick-start
 
 ---
 
