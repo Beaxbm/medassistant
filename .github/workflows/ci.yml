@@ -1,0 +1,74 @@
+# .github/workflows/ci.yml
+
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  backend:
+    name: Backend Tests & Lint
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.9', '3.10', '3.11']
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install dependencies
+        run: |
+          python -m venv .venv
+          source .venv/bin/activate
+          pip install --upgrade pip
+          pip install -r backend/requirements.txt
+
+      - name: Lint with flake8
+        working-directory: backend
+        run: |
+          . .venv/bin/activate
+          flake8 .
+
+      - name: Run pytest
+        working-directory: backend
+        run: |
+          . .venv/bin/activate
+          pytest
+
+  frontend:
+    name: Frontend Lint & Type-Check
+    runs-on: ubuntu-latest
+    needs: backend
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        working-directory: frontend
+        run: |
+          npm ci
+
+      - name: Lint with ESLint
+        working-directory: frontend
+        run: |
+          npm run lint
+
+      - name: Type-check with TypeScript
+        working-directory: frontend
+        run: |
+          npm run type-check
